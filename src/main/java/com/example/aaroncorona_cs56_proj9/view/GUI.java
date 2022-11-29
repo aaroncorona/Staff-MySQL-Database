@@ -4,7 +4,7 @@
  CS56 Project #9 - Database GUI
  ***************************************************************************/
 
-package com.example.aaroncorona_cs56_proj9;
+package com.example.aaroncorona_cs56_proj9.view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;

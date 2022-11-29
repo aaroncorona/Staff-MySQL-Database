@@ -1,5 +1,6 @@
-package com.example.aaroncorona_cs56_proj9;
+package com.example.aaroncorona_cs56_proj9.model;
 
+// Represents the data model for a Staff table
 public class Staff {
 
     private final int id;
@@ -7,6 +8,7 @@ public class Staff {
     private String lastName;
     private char mi;
     private String address;
+    private String city;
     private String state;
     private int phone;
     private String email;
@@ -17,11 +19,12 @@ public class Staff {
         this.lastName = lastName;
     }
     public Staff(int id, String firstName, String lastName,
-                 char mi, String address, String state, int phone, String email) {
+                 char mi, String address,String city, String state, int phone, String email) {
         this.id = id;
         this.firstName = firstName;
         this.mi = mi;
         this.address = address;
+        this.city = city;
         this.state = state;
         this.phone = phone;
         this.email = email;
@@ -61,6 +64,14 @@ public class Staff {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getState() {
