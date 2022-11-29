@@ -1,9 +1,3 @@
-/***************************************************************************
- Author: Aaron Corona
- Date: November 29, 2022
- CS56 Project #9 - Database GUI
- ***************************************************************************/
-
 package com.example.aaroncorona_cs56_proj9.view;
 
 import javafx.application.Application;
@@ -19,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 // GUI for a Client to request Bank actions via Proxy
-public final class GUI extends Application {
+public final class GUI extends Application implements Runnable {
 
     private TextField tfAcctNum;
     private TextField tfAmount;
@@ -122,5 +116,10 @@ public final class GUI extends Application {
         labelStatusText += newText + "\n\n";
         labelStatus.setText(labelStatusText);
         System.out.println(newText);
+    }
+
+    @Override
+    public void run() {
+        launch();
     }
 }
