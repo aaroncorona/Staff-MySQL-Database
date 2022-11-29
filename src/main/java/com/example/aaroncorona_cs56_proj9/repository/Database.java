@@ -3,11 +3,7 @@ package com.example.aaroncorona_cs56_proj9.repository;
 
 import com.example.aaroncorona_cs56_proj9.model.Staff;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +41,7 @@ public final class Database implements AutoCloseable {
     // Helper to get all the databases in the given MySQL instance
     private List<String> getDatabases() throws SQLException {
         List<String> dbNames = new ArrayList<>();
-        ResultSet rs = stmt.executeQuery("show databases");
+        ResultSet rs = stmt.executeQuery("SHOW DATABASES");
         while (rs.next()) {
             dbNames.add(rs.getString(1));
         }
@@ -56,7 +52,7 @@ public final class Database implements AutoCloseable {
     private void createDatabase(String dbName) throws SQLException {
         // Create DB if it doesn't already exist
         if (!getDatabases().contains(dbName)) {
-            stmt.execute("create database " + dbName);
+            stmt.execute("CREATE DATABASE " + dbName);
         }
     }
 
@@ -73,14 +69,14 @@ public final class Database implements AutoCloseable {
     // Creates the Staff table
     protected void createStaffTable() throws SQLException {
         stmt.execute(
-                "create table staff (id char(11) not null, firstName varchar(15) not null, lastName varchar(15) not null, mi char(1), address varchar(25), city varchar(20), phone char(10), email varchar(40), primary key (id));"
+                "CREATE TABLE staff (id char(11) not null, firstName varchar(15) not null, lastName varchar(15) not null, mi char(1), address varchar(25), city varchar(20), phone char(10), email varchar(40), primary key (id));"
         );
     }
 
     // Deletes a given table
     protected void dropTable(String tableName) throws SQLException {
-        stmt.execute("delete * from table " + tableName);
-        stmt.execute("drop table " + tableName);
+        stmt.execute("DELETE * FROM TABLE " + tableName);
+        stmt.execute("DROP TABLE " + tableName);
     }
 
     // Inserts 1 Staff record
@@ -97,37 +93,60 @@ public final class Database implements AutoCloseable {
                 + "\")");
     }
 
-    // Updates 1 Staff record // TODO
-    protected void updateStaffRecord(Staff staff) throws SQLException {
-        stmt.execute("INSERT INTO staff (id, firstName, lastName, mi, address, city, phone, email) "
-                + "VALUES ("+ staff.getId()
-                + ", \"" + staff.getFirstName()
-                + "\",\"" + staff.getLastName()
-                + "\",\"" + staff.getMi()
-                + "\",\"" + staff.getAddress()
-                + "\",\"" + staff.getCity()
-                + "\",\"" + staff.getPhone()
-                + "\",\"" + staff.getEmail()
-                + "\")");
+    // Updates 1 Staff record with all the current info in the record
+    protected Staff updateStaffRecord(Staff staff) throws SQLException {
+        String query = "UPDATE staff SET firstName=?, lastName=?, mi=?, address=?, city=?, phone=?, email=? WHERE Id=? ";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setString(1, staff.getFirstName());
+        ps.setString(2, staff.getLastName());
+        ps.setString(3, staff.getMi());
+        ps.setString(4, staff.getAddress());
+        ps.setString(5, staff.getCity());
+        ps.setInt(6, staff.getPhone());
+        ps.setString(7, staff.getEmail());
+        ps.setInt(8, staff.getId());
+        ps.executeUpdate();
+        return getStaffRecordByID(staff.getId());
     }
 
     // Returns all Staff records
     protected Map<Integer, Staff> getAllStaffRecords() throws SQLException {
-        Map<Integer, Staff> staff = new HashMap();
-        ResultSet rs = stmt.executeQuery("select * from staff");
+        Map<Integer, Staff> allStaff = new HashMap();
+        ResultSet rs = stmt.executeQuery("SELECT * FROM STAFF");
         while (rs.next()) {
-            staff.put(rs.getInt(1), new Staff(rs.getInt(1), rs.getString(2),
-                    rs.getString(3)));
+            allStaff.put(rs.getInt(1), buildStaffObj(rs));
         }
-        return staff;
+        rs.close();
+        return allStaff;
     }
 
     // Returns 1 Staff record using the ID
     protected Staff getStaffRecordByID(int id) throws SQLException {
-        Map<Integer, Staff> staffMap = getAllStaffRecords();
-        Staff staff = staffMap.get(id);
+        String query = "SELECT * FROM staff WHERE Id = ?";
+        PreparedStatement ps = conn.prepareStatement(query);
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        Staff staff = buildStaffObj(rs);
+        rs.close();
         return staff;
     }
+
+    // Helper method to translate a query result set to a Staff object with all its variables populated
+    private static Staff buildStaffObj(ResultSet rs) {
+        Staff staff = null;
+        try {
+            staff = new Staff(
+                    rs.getInt(1), rs.getString(2),
+                    rs.getString(3), rs.getString(4), rs.getString(5),
+                    rs.getString(6), rs.getInt(7), rs.getString(8)
+            );
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return staff;
+    }
+
 
     @Override
     public void close() {

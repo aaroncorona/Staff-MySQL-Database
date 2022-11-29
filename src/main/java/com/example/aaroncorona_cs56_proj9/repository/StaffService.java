@@ -76,6 +76,9 @@ public final class StaffService {
         } catch (SQLException e) {
             System.out.println(e);
         }
+        if(staff == null) {
+            System.out.println("No Staff Updated - ID not found");
+        }
     }
 
     public static Map<Integer, Staff> getAllStaffRecords() {

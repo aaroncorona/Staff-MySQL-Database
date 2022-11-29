@@ -6,7 +6,7 @@ public class Staff {
     private final int id;
     private String firstName;
     private String lastName;
-    private char mi;
+    private String mi;
     private String address;
     private String city;
     private int phone;
@@ -18,7 +18,7 @@ public class Staff {
         this.lastName = lastName;
     }
     public Staff(int id, String firstName, String lastName,
-                 char mi, String address, String city, int phone, String email) {
+                 String mi, String address, String city, int phone, String email) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -49,11 +49,11 @@ public class Staff {
         this.lastName = lastName;
     }
 
-    public char getMi() {
+    public String getMi() {
         return mi;
     }
 
-    public void setMi(char mi) {
+    public void setMi(String mi) {
         this.mi = mi;
     }
 
