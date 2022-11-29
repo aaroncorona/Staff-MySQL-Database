@@ -9,7 +9,6 @@ public class Staff {
     private char mi;
     private String address;
     private String city;
-    private String state;
     private int phone;
     private String email;
 
@@ -19,13 +18,13 @@ public class Staff {
         this.lastName = lastName;
     }
     public Staff(int id, String firstName, String lastName,
-                 char mi, String address,String city, String state, int phone, String email) {
+                 char mi, String address, String city, int phone, String email) {
         this.id = id;
         this.firstName = firstName;
+        this.lastName = lastName;
         this.mi = mi;
         this.address = address;
         this.city = city;
-        this.state = state;
         this.phone = phone;
         this.email = email;
     }
@@ -74,14 +73,6 @@ public class Staff {
         this.city = city;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public int getPhone() {
         return phone;
     }
@@ -96,6 +87,22 @@ public class Staff {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+        return "ID " + id
+                + "; First Name: " + firstName
+                + "; Last Name: " + lastName
+                + "; Address: " + lastName;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + id;
+        return result;
     }
 }
 

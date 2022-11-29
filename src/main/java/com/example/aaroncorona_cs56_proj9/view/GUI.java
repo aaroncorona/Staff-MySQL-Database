@@ -12,8 +12,10 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-// GUI for a Client to request Bank actions via Proxy
+// GUI to request database CRUD Services
 public final class GUI extends Application implements Runnable {
+
+    // TODO
 
     private TextField tfAcctNum;
     private TextField tfAmount;

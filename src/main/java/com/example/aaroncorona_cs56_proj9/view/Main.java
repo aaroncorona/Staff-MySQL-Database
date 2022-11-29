@@ -6,7 +6,10 @@
 
 package com.example.aaroncorona_cs56_proj9.view;
 
+import com.example.aaroncorona_cs56_proj9.model.Staff;
 import com.example.aaroncorona_cs56_proj9.repository.StaffService;
+
+import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {
@@ -17,5 +20,12 @@ public class Main {
         // Create Staff DB and Staff Table
         StaffService.createStaffDatabase();
         StaffService.createStaffTable();
+        // Test TODO delete
+//        int randomId = new Random().nextInt(100);
+//        Staff staff = new Staff(randomId, "Truffle", "Garcia", 'C', "home",
+//                "LA", 310, "teddy@gmail.com");
+//        StaffService.insertStaff(staff);
+//        System.out.println(StaffService.getAllStaff());
+        System.out.println(StaffService.getStaffRecordByID(50));
     }
 }

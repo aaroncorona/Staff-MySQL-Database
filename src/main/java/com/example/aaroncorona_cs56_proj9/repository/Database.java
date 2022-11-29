@@ -42,7 +42,7 @@ public final class Database implements AutoCloseable {
         conn = DriverManager.getConnection(connStr, "root", "adminadmin");
     }
 
-    // Get all databases in the given MySQL instance
+    // Helper to get all the databases in the given MySQL instance
     private List<String> getDatabases() throws SQLException {
         List<String> dbNames = new ArrayList<>();
         ResultSet rs = stmt.executeQuery("show databases");
@@ -52,7 +52,7 @@ public final class Database implements AutoCloseable {
         return dbNames;
     }
 
-    // Create the given DB if it doesn't already exist
+    // Helper to create the given DB if it doesn't already exist
     private void createDatabase(String dbName) throws SQLException {
         // Create DB if it doesn't already exist
         if (!getDatabases().contains(dbName)) {
@@ -61,7 +61,7 @@ public final class Database implements AutoCloseable {
     }
 
     // Returns all tables in the given db
-    private List<String> getTables() throws SQLException {
+    protected List<String> getAllTables() throws SQLException {
         List<String> tableNames = new ArrayList<>();
         ResultSet rs = stmt.executeQuery("show tables");
         while (rs.next()) {
@@ -70,65 +70,63 @@ public final class Database implements AutoCloseable {
         return tableNames;
     }
 
-    // Creates the Staff table in the new DB if it doesn't already exist
+    // Creates the Staff table
     protected void createStaffTable() throws SQLException {
-        // Create the Staff table if it doesn't already exist
-        if (!getTables().contains("staff")) {
-            stmt.execute(
-                    "create table staff (id char(11) not null, lastName varchar(15), firstName varchar(15), mi char(1), address varchar(25), city varchar(20), state char(2), telephone char(10), email varchar(40), primary key (id));"
-            );
-        }
+        stmt.execute(
+                "create table staff (id char(11) not null, firstName varchar(15) not null, lastName varchar(15) not null, mi char(1), address varchar(25), city varchar(20), phone char(10), email varchar(40), primary key (id));"
+        );
     }
 
-    protected void insertStaff(Staff staff) throws SQLException {
-        stmt.execute("INSERT INTO staff (id, firstName, lastName) "
+    // Deletes a given table
+    protected void dropTable(String tableName) throws SQLException {
+        stmt.execute("delete * from table " + tableName);
+        stmt.execute("drop table " + tableName);
+    }
+
+    // Inserts 1 Staff record
+    protected void insertStaffRecord(Staff staff) throws SQLException {
+        stmt.execute("INSERT INTO staff (id, firstName, lastName, mi, address, city, phone, email) "
                 + "VALUES ("+ staff.getId()
                 + ", \"" + staff.getFirstName()
                 + "\",\"" + staff.getLastName()
                 + "\",\"" + staff.getMi()
                 + "\",\"" + staff.getAddress()
-                + "\",\"" + staff.getState()
+                + "\",\"" + staff.getCity()
                 + "\",\"" + staff.getPhone()
                 + "\",\"" + staff.getEmail()
                 + "\")");
     }
 
-    protected List<Staff> getAllStaff() throws SQLException {
-        ArrayList<Staff> staff = new ArrayList<>();
+    // Updates 1 Staff record // TODO
+    protected void updateStaffRecord(Staff staff) throws SQLException {
+        stmt.execute("INSERT INTO staff (id, firstName, lastName, mi, address, city, phone, email) "
+                + "VALUES ("+ staff.getId()
+                + ", \"" + staff.getFirstName()
+                + "\",\"" + staff.getLastName()
+                + "\",\"" + staff.getMi()
+                + "\",\"" + staff.getAddress()
+                + "\",\"" + staff.getCity()
+                + "\",\"" + staff.getPhone()
+                + "\",\"" + staff.getEmail()
+                + "\")");
+    }
+
+    // Returns all Staff records
+    protected Map<Integer, Staff> getAllStaffRecords() throws SQLException {
+        Map<Integer, Staff> staff = new HashMap();
         ResultSet rs = stmt.executeQuery("select * from staff");
         while (rs.next()) {
-            staff.add(new Staff(rs.getInt(1), rs.getString(2),
+            staff.put(rs.getInt(1), new Staff(rs.getInt(1), rs.getString(2),
                     rs.getString(3)));
         }
         return staff;
     }
 
-    protected Staff getStaffByID(int id) throws SQLException {
-        Map<Integer, Staff> staffMap = new HashMap<>();
-        ResultSet rs = stmt.executeQuery("select * from staff where id = " + id);
-//        while (rs.next()) {
-//            staff.add(new Staff(rs.getInt(1), rs.getString(2),
-//                    rs.getString(3)));
-//        }
-//        while (staff.next()) {
-//            staff.add(new Staff(rs.getInt(1), rs.getString(2),
-//                    rs.getString(3)));
-//        }
-        return null;
-//        return staff;
-    }
-
-    protected void updateStaff(Staff staff) throws SQLException {
-        stmt.execute("INSERT INTO staff (id, firstName, lastName) "
-                + "VALUES ("+ staff.getId()
-                + ", \"" + staff.getFirstName()
-                + "\",\"" + staff.getLastName()
-                + "\",\"" + staff.getMi()
-                + "\",\"" + staff.getAddress()
-                + "\",\"" + staff.getState()
-                + "\",\"" + staff.getPhone()
-                + "\",\"" + staff.getEmail()
-                + "\")");
+    // Returns 1 Staff record using the ID
+    protected Staff getStaffRecordByID(int id) throws SQLException {
+        Map<Integer, Staff> staffMap = getAllStaffRecords();
+        Staff staff = staffMap.get(id);
+        return staff;
     }
 
     @Override
