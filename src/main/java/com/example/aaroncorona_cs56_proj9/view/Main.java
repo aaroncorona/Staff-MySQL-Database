@@ -21,10 +21,10 @@ public class Main {
         StaffService.createStaffDatabase();
         StaffService.createStaffTable();
         // Test TODO delete
-//        int randomId = new Random().nextInt(100);
-//        Staff staff = new Staff(randomId, "Truffle", "Garcia", 'C', "home",
-//                "LA", 310, "teddy@gmail.com");
-//        StaffService.insertStaff(staff);
+        int randomId = new Random().nextInt(100);
+        Staff staff = new Staff(50, "Truffle", "Garcia", 'C', "home",
+                "LA", 310, "teddy@gmail.com");
+        StaffService.insertStaffRecord(staff);
 //        System.out.println(StaffService.getAllStaff());
         System.out.println(StaffService.getStaffRecordByID(50));
     }

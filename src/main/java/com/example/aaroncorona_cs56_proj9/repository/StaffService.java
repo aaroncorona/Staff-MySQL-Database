@@ -2,14 +2,12 @@ package com.example.aaroncorona_cs56_proj9.repository;
 
 import com.example.aaroncorona_cs56_proj9.model.Staff;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-// Acts as a layer between the View and the Database to avoid exposing the Database layer publicly
+// Acts as a layer between the View and the Database to perform Staff CRUD operations with safeguards
 public final class StaffService {
 
     private static Database staffDb;
@@ -20,18 +18,7 @@ public final class StaffService {
     public static void createStaffDatabase() {
         try {
             staffDb = new Database("staff");
-            staffDb.createStaffTable();
             System.out.println("Success - Staff DB Exists");
-        } catch (Exception e) {
-            staffDb.close();
-            System.out.println(e);
-        }
-    }
-
-    public static void createStaffTable() {
-        try { // TODO check if the table exists first
-            staffDb.createStaffTable();
-            System.out.println("Success - Staff Table Exists");
         } catch (Exception e) {
             staffDb.close();
             System.out.println(e);
@@ -43,12 +30,25 @@ public final class StaffService {
         return staffDb.getAllTables();
     }
 
+    public static void createStaffTable() {
+        try {
+            if(!getAllStaffTables().contains("staff")) {
+                staffDb.createStaffTable();
+            }
+            System.out.println("Success - Staff Table Exists");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     // Drop the table if it exists
     public static void dropTable(String tableName) {
         try {
             if (getAllStaffTables().contains(tableName)) {
                 staffDb.dropTable(tableName);
                 System.out.println("Success - Table Dropped");
+            } else {
+                System.out.println("Not Dropped - Table does not exist");
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -57,9 +57,22 @@ public final class StaffService {
 
     // Insert the Staff if they don't already exist
     public static void insertStaffRecord(Staff staff) {
-        try { // TODO check if the Staff exists first
-            staffDb.insertStaffRecord(staff);
-            System.out.println("Success - Staff Inserted");
+        try {
+            if(getAllStaffRecords().get(staff.getId()) == null) {
+                staffDb.insertStaffRecord(staff);
+                System.out.println("Success - Staff Inserted");
+            } else {
+                System.out.println("Not Inserted - Staff already exists");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+
+    public static void updateStaffRecord(Staff staff) {
+        try {
+            staffDb.updateStaffRecord(staff);
+            System.out.println("Success - Staff Updated");
         } catch (SQLException e) {
             System.out.println(e);
         }
@@ -76,22 +89,15 @@ public final class StaffService {
     }
 
     public static Staff getStaffRecordByID(int id) {
-        Staff staff = null; // TODO print notice if result is not found / null
+        Staff staff = null;
         try {
             staff = staffDb.getStaffRecordByID(id);
         } catch (SQLException e) {
             System.out.println(e);
         }
+        if(staff == null) {
+            System.out.println("No Staff Returned - ID not found");
+        }
         return staff;
     }
-
-    public static void updateStaffRecord(Staff staff) {
-        try {
-            staffDb.updateStaffRecord(staff);
-            System.out.println("Success - Staff Updated");
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-    }
-
 }
