@@ -41,7 +41,7 @@ public class Database implements AutoCloseable {
         stmt.execute("create table employee(id int primary key, firstName varchar(32), lastName varchar(32))");
     }
 
-    public void insertEmployee(Employee e) throws SQLException {
+    public void insertEmployee(Staff e) throws SQLException {
         Statement stmt = conn.createStatement();
         stmt.execute("INSERT INTO employee (id, firstName, lastName) "
                 + "VALUES ("+ e.getId()
@@ -49,15 +49,15 @@ public class Database implements AutoCloseable {
                 + "\",\"" + e.getLastName() + "\")");
     }
 
-    public List<Employee> getEmployees() throws SQLException {
-        ArrayList<Employee> employees = new ArrayList<>();
+    public List<Staff> getEmployees() throws SQLException {
+        ArrayList<Staff> staff = new ArrayList<>();
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("select * from employee");
         while (rs.next()) {
-            employees.add(new Employee(rs.getInt(1), rs.getString(2),
+            staff.add(new Staff(rs.getInt(1), rs.getString(2),
                     rs.getString(3)));
         }
-        return employees;
+        return staff;
     }
 
     private Set<String> getDatabases() throws SQLException {
@@ -100,12 +100,12 @@ public class Database implements AutoCloseable {
 //            while (result.next()) {
 //                System.out.print(result.getInt(1) + result.getString(2) + result.getString(3));
 //            }
-            ArrayList<Employee> employees = new ArrayList<>();
+            ArrayList<Staff> staff = new ArrayList<>();
             while (rs.next()) {
-                employees.add(new Employee(rs.getInt(1), rs.getString(2),
+                staff.add(new Staff(rs.getInt(1), rs.getString(2),
                         rs.getString(3)));
             }
-            System.out.print(employees);
+            System.out.print(staff);
             con.close();
         } catch (Exception e) {
             System.out.println(e);
