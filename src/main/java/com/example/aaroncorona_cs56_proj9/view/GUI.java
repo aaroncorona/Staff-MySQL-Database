@@ -21,18 +21,18 @@ public final class GUI extends Application implements Runnable {
     public void start(Stage stage) {
 
         // Labels for each Staff variable
-        Label labelTitle = new Label("Enter Staff Information");
-        Label labelId = new Label("Id");
-        Label labelFirstName = new Label("FirstName");
-        Label labelLastName = new Label("LastName");
-        Label labelMi = new Label("Mi");
-        Label labelAddress = new Label("Address");
-        Label labelCity = new Label("City");
-        Label labelPhone = new Label("Phone");
-        Label labelEmail = new Label("Email");
+        final Label labelTitle = new Label("Create and Edit Staff Members");
+        final Label labelId = new Label("Id");
+        final Label labelFirstName = new Label("FirstName");
+        final Label labelLastName = new Label("LastName");
+        final Label labelMi = new Label("Mi");
+        final Label labelAddress = new Label("Address");
+        final Label labelCity = new Label("City");
+        final Label labelPhone = new Label("Phone");
+        final Label labelEmail = new Label("Email");
 
         // Set Label styles
-        labelTitle.setPrefWidth(480);
+        labelTitle.setPrefWidth(470);
         labelTitle.setTextFill(Color.web("#0076a3"));
         labelTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 13));
         labelId.setFont(Font.font("Serif", FontWeight.BOLD, 12));
@@ -45,14 +45,14 @@ public final class GUI extends Application implements Runnable {
         labelEmail.setFont(Font.font("Serif", FontWeight.BOLD, 12));
 
         // Text Fields for each Staff variable
-        TextField tfId = new TextField();
-        TextField tfFirstName = new TextField();
-        TextField tfLastName = new TextField();
-        TextField tfMi = new TextField();
-        TextField tfAddress = new TextField();
-        TextField tfCity = new TextField();
-        TextField tfPhone = new TextField();
-        TextField tfEmail = new TextField();
+        final TextField tfId = new TextField();
+        final TextField tfFirstName = new TextField();
+        final TextField tfLastName = new TextField();
+        final TextField tfMi = new TextField();
+        final TextField tfAddress = new TextField();
+        final TextField tfCity = new TextField();
+        final TextField tfPhone = new TextField();
+        final TextField tfEmail = new TextField();
 
         // Set preferred TF sizes
         tfId.setPrefColumnCount(35);
@@ -82,18 +82,17 @@ public final class GUI extends Application implements Runnable {
                 labelEmail, tfEmail
         );
 
-        // Add Buttons for bank actions in an HBox container
-//        final Button btnBalance = new Button("Balance");
-//        final Button btnDeposit = new Button("Deposit");
-//        final Button btnWithdraw = new Button("Withdraw");
-//        final Button btnQuit = new Button("Quit");
+        // Add Buttons for CRUD actions
+        final Button btnView = new Button("View");
+        final Button btnInsert = new Button("Insert");
+        final Button btnUpdate = new Button("Update");
+        final Button btnClear = new Button("Clear");
         final HBox buttons = new HBox();
-        buttons.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,null,null)));
         buttons.setAlignment(Pos.CENTER);
         buttons.setSpacing(10);
-//        buttons.getChildren().addAll(btnBalance, btnDeposit, btnWithdraw, btnQuit);
+        buttons.getChildren().addAll(btnView, btnInsert, btnUpdate, btnClear);
 
-        // Set button actions to call the Bank proxy
+        // Set button actions to call the CRUD Service methods
 //        btnBalance.setOnAction(event -> {
 //        });
 //        btnDeposit.setOnAction(event -> {
@@ -103,13 +102,33 @@ public final class GUI extends Application implements Runnable {
 //        btnQuit.setOnAction(event -> {
 //        });
 
-        // Create an outer container (vertical box) for the Hboxes
-        final VBox root = new VBox();
-        root.getChildren().addAll(inputs, buttons);
-        root.setSpacing(10);
+        // Label title for the Staff results
+        final Label labelResultsTitle = new Label("Staff Display");
+        labelResultsTitle.setPrefWidth(480);
+        labelResultsTitle.setTextFill(Color.web("#0076a3"));
+        labelResultsTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 13));
+        final HBox resultsTitle = new HBox();
+        resultsTitle.getChildren().addAll(labelResultsTitle);
+
+        // Label to show View results that display Staff info
+        final Label labelResults = new Label("hi\nhi");
+        final HBox results = new HBox();
+        results.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY,null,null)));
+        results.setAlignment(Pos.CENTER);
+        results.getChildren().addAll(labelResults);
+
+        // Create an outer container (vertical box)
+        final VBox vbox = new VBox();
+        vbox.getChildren().addAll(inputs, buttons, resultsTitle, results);
+        vbox.setSpacing(10);
+
+        // Wrap everything in a scrollbar
+        final ScrollPane root = new ScrollPane();
+        root.setFitToWidth(true);
+        root.setContent(vbox);
 
         // Scene
-        final Scene scene = new Scene(root, 500,300);
+        final Scene scene = new Scene(root, 500,400);
         stage.setTitle("Staff Manager");
         stage.setScene(scene);
         stage.show();
