@@ -10,114 +10,109 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 // GUI to request database CRUD Services
 public final class GUI extends Application implements Runnable {
 
-    // TODO
-
-    private TextField tfAcctNum;
-    private TextField tfAmount;
-    private Label labelStatus;
-    private String labelStatusText;
-
     @Override
     public void start(Stage stage) {
 
-        // Add a Label and Text fields for "Account Number" in a Hbox
-        final Label labelAcctNum = new Label("Enter Account Number:  ");
-        tfAcctNum = new TextField();
-        tfAcctNum.setPromptText("Account Num");
-        tfAcctNum.setPrefColumnCount(10);
-        final HBox acctNumRow = new HBox();
-        acctNumRow.setPadding(new Insets(15, 15, 15, 15));
-        acctNumRow.setAlignment(Pos.CENTER);
-        acctNumRow.getChildren().addAll(labelAcctNum, tfAcctNum);
+        // Labels for each Staff variable
+        Label labelTitle = new Label("Enter Staff Information");
+        Label labelId = new Label("Id");
+        Label labelFirstName = new Label("FirstName");
+        Label labelLastName = new Label("LastName");
+        Label labelMi = new Label("Mi");
+        Label labelAddress = new Label("Address");
+        Label labelCity = new Label("City");
+        Label labelPhone = new Label("Phone");
+        Label labelEmail = new Label("Email");
 
-        // Add a Label and Text field for "Amount" in a Hbox
-        final Label labelAmt = new Label("Enter Amount (USD):  ");
-        tfAmount = new TextField();
-        tfAmount.setPromptText("Amount ($)");
-        tfAmount.setPrefColumnCount(10);
-        final HBox amtRow = new HBox();
-        amtRow.setPadding(new Insets(5, 15, 15, 15));
-        amtRow.setAlignment(Pos.CENTER);
-        amtRow.getChildren().addAll(labelAmt, tfAmount);
+        // Set Label styles
+        labelTitle.setPrefWidth(480);
+        labelTitle.setTextFill(Color.web("#0076a3"));
+        labelTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 13));
+        labelId.setFont(Font.font("Serif", FontWeight.BOLD, 12));
+        labelFirstName.setFont(Font.font("Serif", FontWeight.BOLD, 12));
+        labelLastName.setFont(Font.font("Serif", FontWeight.BOLD, 12));
+        labelMi.setFont(Font.font("Serif", FontWeight.BOLD, 12));
+        labelAddress.setFont(Font.font("Serif", FontWeight.BOLD, 12));
+        labelCity.setFont(Font.font("Serif", FontWeight.BOLD, 12));
+        labelPhone.setFont(Font.font("Serif", FontWeight.BOLD, 12));
+        labelEmail.setFont(Font.font("Serif", FontWeight.BOLD, 12));
+
+        // Text Fields for each Staff variable
+        TextField tfId = new TextField();
+        TextField tfFirstName = new TextField();
+        TextField tfLastName = new TextField();
+        TextField tfMi = new TextField();
+        TextField tfAddress = new TextField();
+        TextField tfCity = new TextField();
+        TextField tfPhone = new TextField();
+        TextField tfEmail = new TextField();
+
+        // Set preferred TF sizes
+        tfId.setPrefColumnCount(35);
+        tfFirstName.setPrefColumnCount(12);
+        tfLastName.setPrefColumnCount(12);
+        tfMi.setPrefColumnCount(1);
+        tfAddress.setPrefColumnCount(12);
+        tfCity.setPrefColumnCount(12);
+        tfPhone.setPrefColumnCount(12);
+        tfEmail.setPrefColumnCount(12);
+
+        // Add Labels and Text Fields to an FlowPane
+        final FlowPane inputs = new FlowPane();
+        inputs.setPadding(new Insets(10,10,10,10));
+        inputs.setHgap(10);
+        inputs.setVgap(10);
+        inputs.setAlignment(Pos.CENTER);
+        inputs.getChildren().addAll(
+                labelTitle,
+                labelId, tfId,
+                labelFirstName, tfFirstName,
+                labelLastName, tfLastName,
+                labelMi, tfMi,
+                labelAddress, tfAddress,
+                labelCity, tfCity,
+                labelPhone, tfPhone,
+                labelEmail, tfEmail
+        );
 
         // Add Buttons for bank actions in an HBox container
-        final Button btnBalance = new Button("Balance");
-        final Button btnDeposit = new Button("Deposit");
-        final Button btnWithdraw = new Button("Withdraw");
-        final Button btnQuit = new Button("Quit");
-        final HBox buttonRow = new HBox();
-        buttonRow.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,null,null)));
-        buttonRow.setAlignment(Pos.CENTER);
-        buttonRow.setSpacing(10);
-        buttonRow.getChildren().addAll(btnBalance, btnDeposit, btnWithdraw, btnQuit);
-
-        // Title label for the status results
-        final Label labelStatusTitle = new Label("Client Request Results: ");
-
-        // Add a Label that returns a message from the Bank proxy
-        labelStatus = new Label();
-        labelStatusText = "";
-        labelStatus.setText(labelStatusText);
+//        final Button btnBalance = new Button("Balance");
+//        final Button btnDeposit = new Button("Deposit");
+//        final Button btnWithdraw = new Button("Withdraw");
+//        final Button btnQuit = new Button("Quit");
+        final HBox buttons = new HBox();
+        buttons.setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE,null,null)));
+        buttons.setAlignment(Pos.CENTER);
+        buttons.setSpacing(10);
+//        buttons.getChildren().addAll(btnBalance, btnDeposit, btnWithdraw, btnQuit);
 
         // Set button actions to call the Bank proxy
-        btnBalance.setOnAction(event -> {
-        });
-        btnDeposit.setOnAction(event -> {
-        });
-        btnWithdraw.setOnAction(event -> {
-        });
-        btnQuit.setOnAction(event -> {
-        });
+//        btnBalance.setOnAction(event -> {
+//        });
+//        btnDeposit.setOnAction(event -> {
+//        });
+//        btnWithdraw.setOnAction(event -> {
+//        });
+//        btnQuit.setOnAction(event -> {
+//        });
 
-        // Create an outer container (vertical box) for the rows
-        final VBox vbox = new VBox();
-        vbox.getChildren().addAll(acctNumRow, amtRow, buttonRow, labelStatusTitle, labelStatus);
-        vbox.setSpacing(10);
-
-        // Wrap everything in a scrollbar
-        final ScrollPane root = new ScrollPane();
-        root.setFitToWidth(true);
-        root.setContent(vbox);
+        // Create an outer container (vertical box) for the Hboxes
+        final VBox root = new VBox();
+        root.getChildren().addAll(inputs, buttons);
+        root.setSpacing(10);
 
         // Scene
-        final Scene scene = new Scene(root, 400,500);
-        stage.setTitle("Your Account");
+        final Scene scene = new Scene(root, 500,300);
+        stage.setTitle("Staff Manager");
         stage.setScene(scene);
         stage.show();
-    }
-
-    // Helper method to get the account number
-    private int getAcctNum() {
-        int acctNum = 0;
-        try {
-            acctNum = Integer.parseInt(tfAcctNum.getText());
-        } catch (NumberFormatException e) {
-            System.out.println(e);
-        }
-        return acctNum;
-    }
-
-    // Helper method to get the amount
-    private int getAmount() {
-        int amount = 0;
-        try {
-            amount = Integer.parseInt(tfAmount.getText());
-        } catch (NumberFormatException e) {
-            System.out.println(e);
-        }
-        return amount;
-    }
-
-    // Helper method to update the response label
-    private void addStatusText(String newText) {
-        labelStatusText += newText + "\n\n";
-        labelStatus.setText(labelStatusText);
-        System.out.println(newText);
     }
 
     @Override
