@@ -1,15 +1,6 @@
-/***************************************************************************
- Author: Aaron Corona
- Date: November 29, 2022
- CS56 Project #9 - Database GUI
- ***************************************************************************/
-
 package com.example.aaroncorona_cs56_proj9.view;
 
-import com.example.aaroncorona_cs56_proj9.model.Staff;
 import com.example.aaroncorona_cs56_proj9.repository.StaffService;
-
-import java.util.Random;
 
 public class Main {
     public static void main(String[] args) {

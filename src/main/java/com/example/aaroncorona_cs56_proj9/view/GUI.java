@@ -1,5 +1,7 @@
 package com.example.aaroncorona_cs56_proj9.view;
 
+import com.example.aaroncorona_cs56_proj9.model.Staff;
+import com.example.aaroncorona_cs56_proj9.repository.StaffService;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,6 +18,18 @@ import javafx.stage.Stage;
 
 // GUI to request database CRUD Services
 public final class GUI extends Application implements Runnable {
+
+    // Text fields with global state for continual updating and reading from them
+    private TextField tfId;
+    private TextField tfFirstName;
+    private TextField tfLastName;
+    private TextField tfMi;
+    private TextField tfAddress;
+    private TextField tfCity;
+    private TextField tfPhone;
+    private TextField tfEmail;
+    private Label labelResults;
+    private String labelResultsText;
 
     @Override
     public void start(Stage stage) {
@@ -45,14 +59,14 @@ public final class GUI extends Application implements Runnable {
         labelEmail.setFont(Font.font("Serif", FontWeight.BOLD, 12));
 
         // Text Fields for each Staff variable
-        final TextField tfId = new TextField();
-        final TextField tfFirstName = new TextField();
-        final TextField tfLastName = new TextField();
-        final TextField tfMi = new TextField();
-        final TextField tfAddress = new TextField();
-        final TextField tfCity = new TextField();
-        final TextField tfPhone = new TextField();
-        final TextField tfEmail = new TextField();
+        tfId = new TextField();
+        tfFirstName = new TextField();
+        tfLastName = new TextField();
+        tfMi = new TextField();
+        tfAddress = new TextField();
+        tfCity = new TextField();
+        tfPhone = new TextField();
+        tfEmail = new TextField();
 
         // Set preferred TF sizes
         tfId.setPrefColumnCount(35);
@@ -92,19 +106,53 @@ public final class GUI extends Application implements Runnable {
         buttons.setSpacing(10);
         buttons.getChildren().addAll(btnView, btnInsert, btnUpdate, btnClear);
 
+        // Set button actions to call the CRUD Service methods
+        btnView.setOnAction(event -> {
+            // Extract the ID field and lookup the Staff record
+            try{
+                int id = Integer.parseInt(tfId.getText());
+                Staff staffOutput = StaffService.getStaffRecordByID(id);
+                if(staffOutput != null) {
+                    addResultText(" Staff Return Successful:  " + staffOutput.toString());
+                }
+            } catch(NumberFormatException e) {
+                System.out.println("Invalid ID");
+            }
+        });
+        // Insert Staff record
+        btnInsert.setOnAction(event -> {
+            Staff staffInput = buildStaffObjFromTextFields();
+            Staff staffOutput = StaffService.insertStaffRecord(staffInput);
+            if(staffOutput != null) {
+                addResultText(" Staff Insert Successful:  " + staffOutput.toString());
+            }
+        });
+        // Update Staff record
+        btnUpdate.setOnAction(event -> {
+            Staff staffInput = buildStaffObjFromTextFields();
+            Staff staffOutput = StaffService.updateStaffRecord(staffInput);
+            if(staffOutput != null) {
+                addResultText(" Staff Update Successful:  " + staffOutput.toString());
+            }
+        });
+        // Clear all text fields
+        btnClear.setOnAction(event -> {
+            clearTextFields();
+        });
+
         // Label title for the Staff results
         final Label labelResultsTitle = new Label("Staff Display");
         labelResultsTitle.setPrefWidth(480);
         labelResultsTitle.setTextFill(Color.web("#0076a3"));
         labelResultsTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 13));
+        labelResultsText = "";
         final HBox resultsTitle = new HBox();
         resultsTitle.getChildren().addAll(labelResultsTitle);
 
         // Label to show View results that display Staff info
-        final Label labelResults = new Label("hi\nhi");
+        labelResults = new Label();
         final HBox results = new HBox();
         results.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY,null,null)));
-        results.setAlignment(Pos.CENTER);
         results.getChildren().addAll(labelResults);
 
         // Create an outer container (vertical box)
@@ -122,6 +170,56 @@ public final class GUI extends Application implements Runnable {
         stage.setTitle("Staff Manager");
         stage.setScene(scene);
         stage.show();
+    }
+
+    // Helper method to intake the text field data to create a Staff object
+    private Staff buildStaffObjFromTextFields() {
+        // Make sure that the minimum 3 fields are populated
+        if(tfId.getText().equals("")
+                || tfFirstName.getText().equals("")
+                || tfLastName.getText().equals("")) {
+            System.out.println("Error - Please populate an ID, First Name, and Last Name");
+            return null;
+        }
+        // Extract Int fields from the text boxes
+        int id = 0;
+        int phone = 0;
+        try{
+            id = Integer.parseInt(tfId.getText());
+            phone = Integer.parseInt(tfPhone.getText());
+        } catch(NumberFormatException e) {}
+        // Build the Staff object
+        Staff staff = new Staff(
+                id,
+                tfFirstName.getText(),
+                tfLastName.getText(),
+                tfMi.getText(),
+                tfAddress.getText(),
+                tfCity.getText(),
+                phone,
+                tfEmail.getText()
+        );
+        return staff;
+    }
+
+    // Helper method to empty text fields
+    private void clearTextFields() {
+        // Clear all text fields
+        tfId.setText("");
+        tfFirstName.setText("");
+        tfLastName.setText("");
+        tfMi.setText("");
+        tfAddress.setText("");
+        tfCity.setText("");
+        tfPhone.setText("");
+        tfEmail.setText("");
+    }
+
+    // Helper method to update the result label
+    private void addResultText(String newText) {
+        labelResultsText += newText + "\n\n";
+        labelResults.setText(labelResultsText);
+        System.out.println(newText);
     }
 
     @Override

@@ -42,10 +42,10 @@ public final class StaffService {
     }
 
     // Drop the table if it exists
-    public static void dropTable(String tableName) {
+    public static void dropTable(String tableNameInput) {
         try {
-            if (getAllStaffTables().contains(tableName)) {
-                staffDb.dropTable(tableName);
+            if (getAllStaffTables().contains(tableNameInput)) {
+                staffDb.dropTable(tableNameInput);
                 System.out.println("Success - Table Dropped");
             } else {
                 System.out.println("Not Dropped - Table does not exist");
@@ -56,31 +56,39 @@ public final class StaffService {
     }
 
     // Insert the Staff if they don't already exist
-    public static void insertStaffRecord(Staff staff) {
+    public static Staff insertStaffRecord(Staff staffInput) {
         try {
-            if(getAllStaffRecords().get(staff.getId()) == null) {
-                staffDb.insertStaffRecord(staff);
+            if(getStaffRecordByID(staffInput.getId()) == null) {
+                staffDb.insertStaffRecord(staffInput);
                 System.out.println("Success - Staff Inserted");
+                return getStaffRecordByID(staffInput.getId()); // return result
             } else {
                 System.out.println("Not Inserted - Staff already exists");
+                return null;
             }
         } catch (SQLException e) {
             System.out.println(e);
+            return null;
         }
     }
 
-    public static void updateStaffRecord(Staff staff) {
+    // Update the Staff if it exists
+    public static Staff updateStaffRecord(Staff staffInput) {
+        if(getStaffRecordByID(staffInput.getId()) == null) {
+            System.out.println("No Staff Updated - ID not found");
+            return null;
+        }
         try {
-            staffDb.updateStaffRecord(staff);
+            staffDb.updateStaffRecord(staffInput);
             System.out.println("Success - Staff Updated");
+            return getStaffRecordByID(staffInput.getId());
         } catch (SQLException e) {
             System.out.println(e);
-        }
-        if(staff == null) {
-            System.out.println("No Staff Updated - ID not found");
+            return null;
         }
     }
 
+    // Return all Staff records
     public static Map<Integer, Staff> getAllStaffRecords() {
         Map<Integer, Staff> allStaff = new HashMap();
         try {
@@ -91,16 +99,18 @@ public final class StaffService {
         return allStaff;
     }
 
+    // Return the Staff record if it exists
     public static Staff getStaffRecordByID(int id) {
-        Staff staff = null;
         try {
-            staff = staffDb.getStaffRecordByID(id);
+            if(staffDb.getStaffRecordByID(id) == null) {
+                System.out.println("No Staff Returned - ID not found");
+                return null;
+            } else {
+                return staffDb.getStaffRecordByID(id);
+            }
         } catch (SQLException e) {
             System.out.println(e);
+            return null;
         }
-        if(staff == null) {
-            System.out.println("No Staff Returned - ID not found");
-        }
-        return staff;
     }
 }

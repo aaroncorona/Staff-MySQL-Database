@@ -94,7 +94,7 @@ public class Staff {
         return "ID " + id
                 + "; First Name: " + firstName
                 + "; Last Name: " + lastName
-                + "; Address: " + lastName;
+                + "; Address: " + address;
     }
 
     @Override
