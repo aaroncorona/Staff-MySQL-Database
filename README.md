@@ -1,4 +1,4 @@
-# Staff-MySQL-Database
+# Staff Database (MySQL)
 
 **Purpose**: Project to practice building MySQL backends with a JavaFX GUI.
 
