@@ -92,16 +92,6 @@ public final class GUI extends Application implements Runnable {
         buttons.setSpacing(10);
         buttons.getChildren().addAll(btnView, btnInsert, btnUpdate, btnClear);
 
-        // Set button actions to call the CRUD Service methods
-//        btnBalance.setOnAction(event -> {
-//        });
-//        btnDeposit.setOnAction(event -> {
-//        });
-//        btnWithdraw.setOnAction(event -> {
-//        });
-//        btnQuit.setOnAction(event -> {
-//        });
-
         // Label title for the Staff results
         final Label labelResultsTitle = new Label("Staff Display");
         labelResultsTitle.setPrefWidth(480);
