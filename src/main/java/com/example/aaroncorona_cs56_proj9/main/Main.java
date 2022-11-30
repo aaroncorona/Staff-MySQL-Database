@@ -1,6 +1,7 @@
-package com.example.aaroncorona_cs56_proj9.view;
+package com.example.aaroncorona_cs56_proj9.main;
 
 import com.example.aaroncorona_cs56_proj9.repository.StaffService;
+import com.example.aaroncorona_cs56_proj9.view.GUI;
 
 public class Main {
     public static void main(String[] args) {
